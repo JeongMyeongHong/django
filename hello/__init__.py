@@ -1,93 +1,120 @@
 from hello.domains import Member
-from hello.models import Quiz01Calc, Quiz02Bmi, Quiz03Grade, Quiz04GradeAuto, Quiz05Dice, Quiz06RandomGenerator, \
-    Quiz07RandomChoice, Quiz08Rps, Quiz09GetPrime, Quiz10LeapYear, Quiz11NumberGolf, Quiz12Lotto, Quiz13Bank, \
-    Quiz14Gugudan
-
-
-def main():
-    while 1:
-        menu = input('0.Exit 1. Calc 2. BMI 3. Grade 4. GradeAuto 5. DICE 6. RandomGenerator 7. RandomChoice '
-                     '8. RPS 9. GetPrime 10. LeapYear 11. NumberGolf 12. Lotto 13. Bank 14. Gugudan')
-        if menu == '0':
-            break
-
-        elif menu == '1':
-            q1 = Quiz01Calc(int(input('첫번째 수')), input('연산자'), int(input('두번째 수')))
-            res = f'{q1.num1} {q1.opcode} {q1.num2} = {q1.calculator()}'
-
-        elif menu == '2':
-            member = Member
-            q2 = Quiz02Bmi
-            member.name = input('이름 입력 : ')
-            member.height = float(input('키 입력 : '))
-            member.weight = float(input('몸무게 입력 : '))
-            res = f'{member.name} 님은 키 : {member.height} ' \
-                  f'몸무게 : {member.weight} 결과 : {q2.get_bmi(member)}'
-
-        elif menu == '3':
-            q3 = Quiz03Grade(input('이름 입력'), int(input('국어점수 입력')), int(input('영어점수 입력')), int(input('수학점수 입력')))
-            res = f'{q3.name} 님은 {q3.chk_pass()}입니다.'
-
-        elif menu == '4':
-            for i in []:
-                pass
-            q4 = Quiz04GradeAuto(input('이름 입력'), int(input('국어점수 입력')), int(input('영어점수 입력')), int(input('수학점수 입력')))
-        elif menu == '5':
-            res = Quiz05Dice.cast()
-        elif menu == '6':
-            q6 = Quiz06RandomGenerator(int(input('시작값 입력.')), int(input('끝값 입력.')))
-            res = f'선택된 값은 {q6.cast()} 입니다.'
-
-        elif menu == '7':
-            q7 = Quiz07RandomChoice()
-            res = q7.extract()
-
-        elif menu == '8':
-            q8 = Quiz08Rps(int(input('1.가위 2.바위 3.보')))
-            res = f'User : {q8.rsp[q8.user - 1]}\tCom : {q8.rsp[q8.com - 1]} \t 결과 : {q8.battle()}'
-
-        elif menu == '9':
-            q9 = Quiz09GetPrime(int(input('첫번째 수 입력')), int(input('두번째 수 입력')))
-            res = f'{q9.no1}과 {q9.no2}의 사이의 소수는 {q9.get_prime()} 입니다.'
-
-        elif menu == '10':
-            q10 = Quiz10LeapYear(int(input('확인하고 싶은 년도를 입력하세요.')))
-            res = q10.get_leapyear()
-
-        elif menu == '11':
-            q11 = Quiz11NumberGolf()
-            while q11.goal(int(input('1~10000 사이의 숫자를 입력하세요'))):
-                pass
-            res = f'축하합니다 정답입니다.'
-
-        elif menu == '12':
-            q12 = Quiz12Lotto()
-            q12.print_lotto()
-            res = ''
-
-        elif menu == '13':
-            q13 = Quiz13Bank(input('이름을 입력해주세요'), int(input('최초 입금액을 입력해주세요')))
-            while 1:
-                menu = input('0.Exit 1. 입금 2. 출금 3.잔고확인')
-                if menu == '0':
-                    break
-                elif menu == '1':
-                    q13.deposit(int(input('입금 금액 입력')))
-                elif menu == '2':
-                    q13.withdraw(int(input('출금 금액 입력')))
-                elif menu == '3':
-                    print(f'잔액은 {q13.get_account()}입니다')
-            res = '은행어플 종료'
-
-        elif menu == '14':
-            Quiz14Gugudan.googoo()
-            res = '구구단 끝'
-
-        else:
-            res = f'잘못된 선택입니다.'
-
-        print(res)
-
+from hello.quiz00 import Quiz00
+from hello.quiz10 import Quiz10
+from hello.quiz20 import Quiz20
+from hello.quiz30 import Quiz30
+from hello.quiz40 import Quiz40
 
 if __name__ == '__main__':
-    main()
+    q0 = Quiz00()
+    q1 = Quiz10()
+    q2 = Quiz20()
+    q3 = Quiz30()
+    q4 = Quiz40()
+    while 1:
+        menu = input("00계산기 01Bmi 02주사위 03가위바위보 04윤년 05성적표 06멤버선택 07로또 08입출금 09구구단"
+                     "10버블 11삽입 12선택 13퀵 14병합 15매직 16지그재그 17소수 18숫자맞추기 19예약"
+                     "20리스트 21튜플 22딕셔너리 23 24 25 26 27 28 29"
+                     "30 31 32 33 34 35 36 37 38 39")
+        if menu == '00':
+            q0.quiz00calculator()
+        elif menu == '01':
+            q0.quiz01bmi()
+        elif menu == '02':
+            q0.quiz02dice()
+        elif menu == '03':
+            q0.quiz03rps()
+        elif menu == '04':
+            q0.quiz04leap()
+        elif menu == '05':
+            q0.quiz05grade()
+        elif menu == '06':
+            q0.quiz06memberChoice()
+        elif menu == '07':
+            q0.quiz07lotto()
+        elif menu == '08':
+            q0.quiz08bank()
+        elif menu == '09':
+            q0.quiz09gugudan()
+        elif menu == '10':
+            q1.quiz10bubble()
+        elif menu == '11':
+            q1.quiz11insertion()
+        elif menu == '12':
+            q1.quiz12selection()
+        elif menu == '13':
+            q1.quiz13quick()
+        elif menu == '14':
+            q1.quiz14merge()
+        elif menu == '15':
+            q1.quiz15magic()
+        elif menu == '16':
+            q1.quiz16zigzag()
+        elif menu == '17':
+            q1.quiz17prime()
+        elif menu == '18':
+            q1.quiz18golf()
+        elif menu == '19':
+            q1.quiz19booking()
+        elif menu == '20':
+            q2.quiz20list()
+        elif menu == '21':
+            q2.quiz21tuple()
+        elif menu == '22':
+            q2.quiz22dict()
+        elif menu == '23':
+            q2.quiz23listcom()
+        elif menu == '24':
+            q2.quiz24zip()
+        elif menu == '25':
+            q2.quiz25dictcom()
+        elif menu == '26':
+            q2.quiz26map()
+        elif menu == '27':
+            q2.quiz27()
+        elif menu == '28':
+            q2.quiz28()
+        elif menu == '29':
+            q2.quiz29()
+        elif menu == '30':
+            q2.quiz30()
+        elif menu == '31':
+            q2.quiz31()
+        elif menu == '32':
+            q2.quiz32()
+        elif menu == '33':
+            q2.quiz33()
+        elif menu == '34':
+            q2.quiz34()
+        elif menu == '35':
+            q2.quiz35()
+        elif menu == '36':
+            q2.quiz36()
+        elif menu == '37':
+            q2.quiz37()
+        elif menu == '38':
+            q2.quiz38()
+        elif menu == '39':
+            q2.quiz39()
+        elif menu == '40':
+            q4.quiz40()
+        elif menu == '41':
+            q4.quiz41()
+        elif menu == '42':
+            q4.quiz42()
+        elif menu == '43':
+            q4.quiz43()
+        elif menu == '44':
+            q4.quiz44()
+        elif menu == '45':
+            q4.quiz45()
+        elif menu == '46':
+            q4.quiz46()
+        elif menu == '47':
+            q4.quiz47()
+        elif menu == '48':
+            q4.quiz48()
+        elif menu == '49':
+            q4.quiz49()
+        else:
+            break

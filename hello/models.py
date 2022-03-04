@@ -1,7 +1,7 @@
 import random
 
-class Quiz01Calc:
 
+class Quiz01Calc:
     def __init__(self, num1, opcode, num2):
         self.num1 = num1
         self.opcode = opcode
@@ -67,7 +67,7 @@ class Quiz03Grade:
         return self.sum() / 3
 
     def chk_pass(self):
-        if self.avg() >= 180:
+        if self.avg() >= 60:
             return '합격'
         else:
             return '불합격'
