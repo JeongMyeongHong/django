@@ -1,20 +1,34 @@
-import random
 from quiz00 import Quiz00
-
-def myRandom(start, end):
-    return random.randint(start, end)
-
-
-def my100():
-    return myRandom(1, 100)
+from domains import my100, my_random, ten_nums
 
 
 class Quiz10:
-
     def quiz10bubble(self) -> str:
+        arr = ten_nums()
+        print(arr)
+        for i in range(0, len(arr) - 1):
+            for j in range(0, len(arr) - 1 - i):
+                if arr[j] > arr[j + 1]:
+                    tmp = arr[j]
+                    arr[j] = arr[j + 1]
+                    arr[j + 1] = tmp
+            print(f'{i}회차 배열 : {arr}')
         return None
 
     def quiz11insertion(self) -> str:
+        arr = ten_nums()
+        arr2 = []
+        print(arr)
+        for i in range(1, len(arr) - 1):
+            for j in range(0, i):
+                if arr[j] > arr[i]:
+                    arr2[j] = arr[j]
+                else:
+                    for k in range(j, i):
+                        arr
+
+
+            print(f'{i}회차 배열 : {arr}')
         return None
 
     def quiz12selection(self) -> str:

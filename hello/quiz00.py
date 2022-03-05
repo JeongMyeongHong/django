@@ -1,14 +1,7 @@
 import random
+from domains import my100, my_random
 
 from hello import Member
-
-
-def myRandom(start, end):
-    return random.randint(start, end)
-
-
-def my100():
-    return myRandom(1, 100)
 
 
 def add(num1, num2):
@@ -58,6 +51,10 @@ def withdraw(account, withdraw):
     return None
 
 
+def chkaccount(name, account):
+    print(f'{name} 님의 현재 잔액은 {account}원 입니다.')
+
+
 class Quiz00:
     def __init__(self):
         pass
@@ -65,7 +62,7 @@ class Quiz00:
     def quiz00calculator(self):
         num1 = my100()
         num2 = my100()
-        opcode_num = myRandom(0, 4)
+        opcode_num = my_random(0, 4)
         opcode_symbol = ['+', '-', '*', '/', '%']
         opcode = opcode_symbol[opcode_num]
         print(f'{num1} {opcode} {num2} = {calculator(num1, opcode, num2): .1f}')
@@ -74,8 +71,8 @@ class Quiz00:
     def quiz01bmi(self):
         this = Member()
         this.name = self.quiz06memberChoice()
-        this.height = myRandom(160, 190)
-        this.weight = myRandom(50, 100)
+        this.height = my_random(160, 190)
+        this.weight = my_random(50, 100)
         bmi_res = this.weight * 10000 / this.height / this.height
         if bmi_res > 25.0:
             res = '비만'
@@ -88,7 +85,7 @@ class Quiz00:
         print(f'{this.name} 님은 \n키 : {this.height}, 몸무게 : {this.weight}\n결과 : {res}입니다.')
 
     def quiz02dice(self):
-        print(myRandom(1, 6))
+        print(my_random(1, 6))
         return None
 
     def quiz03rps(self):
@@ -106,7 +103,7 @@ class Quiz00:
         return None
 
     def quiz04leap(self):
-        year = myRandom(0, 3000)
+        year = my_random(0, 3000)
         if year % 4 == 0 & year % 100 != 0 | year % 400 == 0:
             res = '윤년'
         else:
@@ -133,27 +130,64 @@ class Quiz00:
                    '심민혜', '권솔이', '김지혜', '하진희', '최은아',
                    '최민서', '한성수', '김윤섭', '김승현',
                    "강 민", "최건일", "유재혁", "김아름", "장원종"]
-        print(members[myRandom(0, len(members) - 1)])
-        return members[myRandom(0, len(members) - 1)]
+        print(members[my_random(0, len(members) - 1)])
+        return members[my_random(0, len(members) - 1)]
 
     def quiz07lotto(self):
-        lotto = random.sample(range(1, 46), 6)
-        lotto.sort()
-        for i in [lotto]:
-            print(f'{i}\t', end='')
-            print()
+        sel_num = random.sample(range(1, 46), 6)
+        sel_num.sort()
+        prize_num = random.sample(range(1, 46), 6)
+        prize_num.sort()
+        bonus_num = 0
+        bonus_chk = 1
+        while bonus_chk:
+            bonus_num = my_random(1, 46)
+            for i in prize_num:
+                if i != bonus_num and i == prize_num[len(prize_num) - 1]:
+                    bonus_chk = 0
+        cnt = 0
+        res = ''
+        rank = '꽝'
+        print('내가 고른 번호')
+        print(sel_num)
+        print('당첨 번호')
+        print(f'{prize_num} + {bonus_num}')
+
+        for i in prize_num:
+            for j in sel_num:
+                if i == j:
+                    cnt += 1
+                    res += f'{i} '
+                    break
+
+        if cnt == 6:
+            rank = '1등'
+        elif cnt == 5:
+            for i in sel_num:
+                if i == bonus_num:
+                    rank = '2등'
+                    res += f'{i} '
+                    break
+                elif i == (len(sel_num) - 1):
+                    rank = '3등'
+        elif cnt == 4:
+            rank = '4등'
+        elif cnt == 3:
+            rank = '5등'
+        elif cnt == 0:
+            res = '없음'
+
+        print(f'맞은 번호는 {res}이며 {rank}입니다.')
         return None
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
-        name = '홍길동'
-        account = myRandom(0, 1000) * 10
-        deposit_money = myRandom(0, 1000) * 10
-        withdraw_money = myRandom(0, 1000) * 10
-        print(f'{name} 님의 현재 잔액은 {account}원 입니다.')
-        print(f'{deposit_money}원을 입금합니다.')
+        name = self.quiz06memberChoice()
+        account = my_random(0, 1000) * 10
+        deposit_money = my_random(0, 1000) * 10
+        withdraw_money = my_random(0, 1000) * 10
         deposit(account, deposit_money)
-        print(f'{withdraw_money}원을 출금합니다.')
         withdraw(account, withdraw_money)
+        chkaccount(name, account)
         return None
 
     def quiz09gugudan(self):  # 책받침구구단

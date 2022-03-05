@@ -1,4 +1,17 @@
+import random
 from dataclasses import dataclass
+
+
+def ten_nums():
+    return random.sample(range(1, 101), 10)
+
+
+def my_random(start, end):
+    return random.randint(start, end)
+
+
+def my100():
+    return my_random(1, 100)
 
 
 @dataclass
