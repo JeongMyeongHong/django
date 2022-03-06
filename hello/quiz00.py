@@ -42,13 +42,13 @@ def calculator(num1, opcode, num2):
 def deposit(account, deposit):
     account = account + deposit
     print(f'{deposit}원을 입금하였습니다. 잔고는 {account} 입니다')
-    return None
+    return account
 
 
 def withdraw(account, withdraw):
     account = account - withdraw
     print(f'{withdraw}원을 출금하였습니다. 잔고는 {account} 입니다')
-    return None
+    return account
 
 
 def chkaccount(name, account):
@@ -136,15 +136,12 @@ class Quiz00:
     def quiz07lotto(self):
         sel_num = random.sample(range(1, 46), 6)
         sel_num.sort()
-        prize_num = random.sample(range(1, 46), 6)
+        prize_num = random.sample(range(1, 46), 7)
+        bonus_num = prize_num[6]
+        del prize_num[6]
+        print(len(prize_num))
         prize_num.sort()
-        bonus_num = 0
-        bonus_chk = 1
-        while bonus_chk:
-            bonus_num = my_random(1, 46)
-            for i in prize_num:
-                if i != bonus_num and i == prize_num[len(prize_num) - 1]:
-                    bonus_chk = 0
+
         cnt = 0
         res = ''
         rank = '꽝'
@@ -182,15 +179,25 @@ class Quiz00:
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
         name = self.quiz06memberChoice()
-        account = my_random(0, 1000) * 10
+        account = my_random(0, 1000) * 10  # 최초 잔액 설정
         deposit_money = my_random(0, 1000) * 10
         withdraw_money = my_random(0, 1000) * 10
-        deposit(account, deposit_money)
-        withdraw(account, withdraw_money)
-        chkaccount(name, account)
+        while 1:
+            sel = input('0. Exit 1. 입금 2. 출금 3. 잔고 확인')
+            if sel == '1':
+                account = deposit(account, deposit_money)
+            elif sel == '2':
+                if account >= withdraw_money:
+                    account = withdraw(account, withdraw_money)
+                else:
+                    print('잔액이 부족 합니다.')
+            elif sel == '3':
+                chkaccount(name, account)
+            else:
+                break
         return None
 
-    def quiz09gugudan(self):  # 책받침구구단
+    def quiz09gugudan(self):  # 책받침 구구단
         for i in (2, 6):
             for j in range(1, 10):
                 for k in range(0, 4):
