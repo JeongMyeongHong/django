@@ -57,14 +57,27 @@ class Quiz10:
 
     def quiz15magic(self) -> str:
         num = my_random(2, 5) * 2 - 1
-        print(num)
         arr = [[0 for col in range(num)] for row in range(num)]
         row_index = num - 1
         col_index = len(arr) - int(num / 2) - 1
-        print(col_index)
         arr[row_index][col_index] = 1
-        for i in range(2, num * num):
-
+        for i in range(2, len(arr) * len(arr[0]) + 1):
+            next_row_index = row_index + 1
+            next_col_index = col_index + 1
+            if next_row_index >= len(arr):
+                next_row_index = 0
+            if next_col_index >= len(arr[0]):
+                next_col_index = 0
+            if arr[next_row_index][next_col_index] == 0:
+                arr[next_row_index][next_col_index] = i
+            else:
+                next_row_index = row_index - 1
+                next_col_index = col_index
+                arr[next_row_index][next_col_index] = i
+            row_index = next_row_index
+            col_index = next_col_index
+        for j in range(0, len(arr[0])):
+            print(arr[j])
         return None
 
     def quiz16zigzag(self) -> str:
@@ -122,5 +135,6 @@ class Quiz10:
     def quiz19booking(self) -> str:
         q00 = Quiz00()
         name = q00.quiz06memberChoice()
+
 
         return None

@@ -77,25 +77,25 @@ if __name__ == '__main__':
         elif menu == '29':
             q2.quiz29()
         elif menu == '30':
-            q2.quiz30()
+            q3.quiz30()
         elif menu == '31':
-            q2.quiz31()
+            q3.quiz31()
         elif menu == '32':
-            q2.quiz32()
+            q3.quiz32()
         elif menu == '33':
-            q2.quiz33()
+            q3.quiz33()
         elif menu == '34':
-            q2.quiz34()
+            q3.quiz34()
         elif menu == '35':
-            q2.quiz35()
+            q3.quiz35()
         elif menu == '36':
-            q2.quiz36()
+            q3.quiz36()
         elif menu == '37':
-            q2.quiz37()
+            q3.quiz37()
         elif menu == '38':
-            q2.quiz38()
+            q3.quiz38()
         elif menu == '39':
-            q2.quiz39()
+            q3.quiz39()
         elif menu == '40':
             q4.quiz40()
         elif menu == '41':
