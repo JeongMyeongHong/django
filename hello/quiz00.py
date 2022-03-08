@@ -212,7 +212,7 @@ class Quiz00:
 
 
 class Account:
-    def __init__(self, name, account_number, money):
+    def __init__(self, name=None, account_number=None, money=None):
         self.BANK_NAME = '비트은행'
         self.name = member_choice() if name is None else name
         self.account_number = self.creat_account_number() if account_number is None else account_number
@@ -225,37 +225,59 @@ class Account:
                f'계좌번호 : {self.account_number}\t' \
                f'잔고 : {self.money}만원'
 
-    def del_account(self, ls, account_number):
+    @staticmethod
+    def del_account(ls, account_number):
         for i, j in enumerate(ls):
             if j.account_number == account_number:
-                del ls[i]
+                res = f'{j.name}님의 {j.account_number} 계좌가 삭제 되었습니다.'
+                ls.remove(j)
+                return res
+            elif i == len(ls) - 1:
+                return '존재하지 않는 계좌입니다.'
 
-    '''def deposit(self, account_number, deposit_money):
-        money += deposit_money
-        print(f'{deposit_money}원을 입금하였습니다. 잔고는 {account} 입니다')
-        return account'''
+    @staticmethod
+    def find_account(ls, account_number):
+        '''for i, j in enumerate(ls):
+            if j.account_number == account_number:
+                return j.to_string()
+            elif i == len(ls):
+                return '존재하지 않는 계좌입니다.'''''
+        return ''.join([j.to_string() if j.account_number == account_number else '' for j in ls])
 
-    def withdraw(self, account, withdraw):
-        '''account = account - withdraw
-        if account >= withdraw_money:
-            account = withdraw(account, withdraw_money)
-            print(f'{withdraw}원을 출금하였습니다. 잔고는 {account} 입니다')
+    @staticmethod
+    def deposit(ls, account_number, deposit_money):
+        for i in ls:
+            if i.account_number == account_number:
+                i.money += deposit_money
+                return f'{i.name}님의 계좌에 {deposit_money}만원 입금 되었습니다.\n' \
+                       f'현재 잔액 : {i.money}만원'
+            elif i == ls[len(ls) - 1]:
+                return '존재하지 않는 계좌입니다.'
 
+    @staticmethod
+    def withdraw(ls, account_number, withdraw_money):
+        if account_number in ls:
+            for i in ls:
+                if i.account_number == account_number:
+                    if i.money >= withdraw_money:
+                        i.money -= withdraw_money
+                        return f'{i.name}님의 계좌에 {withdraw_money}만원 출금 되었습니다.\n' \
+                               f'현재 잔액 : {i.money}만원'
+                    else:
+                        return '잔액이 부족합니다'
         else:
-            print('잔액이 부족 합니다.')
-        return account'''
+            return '존재하지 않는 계좌입니다.'
 
     @staticmethod
     def creat_account_number():
-        account_number = f'{str(my_random(0, 999)).zfill(3)}-' \
+        '''account_number = f'{str(my_random(0, 999)).zfill(3)}-' \
                          f'{str(my_random(0, 99)).zfill(2)}-' \
                          f'{str(my_random(0, 999999)).zfill(6)}'
-        account_number2 = "".join(['-' if i == 3 or i == 6 else str(my_random(0, 9)) for i in range(13)])
         account_number3 = [str(my_random(0, 9)) for i in range(11)]
         account_number4 = [str(my_random(0, 9)) for i in range(11)]
         account_number4.insert(3, '-')
-        account_number4.insert(6, '-')
-        return account_number2
+        account_number4.insert(6, '-')'''
+        return ''.join(['-' if i == 3 or i == 6 else str(my_random(0, 9)) for i in range(13)])
 
     @staticmethod
     def main():
@@ -263,21 +285,19 @@ class Account:
         res = ''
         res2 = ''
         while 1:
-            menu = input('0. 종료 1. 계좌개설 2. 계좌목록 3. 입금 4. 출금 5. 계좌해지')
+            menu = input('0. 종료 1. 계좌개설 2. 계좌목록 3. 입금 4. 출금 5. 계좌해지 6. 계좌조회')
             if menu == '0':
                 break
             elif menu == '1':
-                ls.append(Account(None, None, None))
+                ls.append(Account())
             elif menu == '2':
                 res = '\n'.join([i.to_string() for i in ls])
+                print(res)
             elif menu == '3':
-                account_number = input('입금할 계좌번호')
-                deposit_money = input('입금액')
+                print(Account.deposit(ls, input('입금할 계좌번호'), int(input('입금액'))))
             elif menu == '4':
-                account_number = input('입금할 계좌번호')
-                withdraw_money = input('출금액')
+                print(Account.withdraw(ls, input('출금할 계좌번호'), int(input('출금액'))))
             elif menu == '5':
-                pass
-            print(res)
-
-
+                print(Account.del_account(ls, input('삭제할 계좌번호를 입력해주세요.')))
+            elif menu == '6':
+                print(Account.find_account(ls, input('조회할 계좌번호를 입력해주세요.')))

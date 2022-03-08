@@ -1,4 +1,5 @@
-import random
+from urllib.request import Request, urlopen
+from bs4 import BeautifulSoup
 
 
 class Quiz20:
@@ -85,14 +86,32 @@ class Quiz20:
         print(a2)
         return None
 
-    def quiz24zip(self) -> str: return None
+    def quiz24zip(self) -> str:
+        url = 'https://music.bugs.co.kr/chart/track/realtime/total'
+        html_doc = urlopen(url)
+        soup = BeautifulSoup(html_doc, 'lxml')  # html.parser vs lxml
+        # print(soup.prettify())
+        a = soup.find_all('p', attrs={"class": "artist"})
+        print(''.join([i.get_text() for i in a]))
 
-    def quiz25dictcom(self) -> str: return None
+    def quiz25dictcom(self) -> str:
+        return None
 
-    def quiz26map(self) -> str: return None
+    def quiz26map(self) -> str:
+        return None
 
-    def quiz27(self) -> str: return None
+    def quiz27melon(self) -> str:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        url = 'https://www.melon.com/chart/index.htm?dayTime=2022030816'
+        req = Request(url, headers=headers)
+        soup = BeautifulSoup(urlopen(req), 'lxml')
+        #a = soup.find_all('span', {"class": "checkEllipsis"})
+        a = soup.find_all('div', {"class": "ellipsis rank01"})
+        print('\n'.join([i.get_text().strip() for i in a[:10]]))
+        return None
 
-    def quiz28(self) -> str: return None
+    def quiz28(self) -> str:
+        return None
 
-    def quiz29(self) -> str: return None
+    def quiz29(self) -> str:
+        return None
