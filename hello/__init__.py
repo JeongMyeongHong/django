@@ -19,7 +19,6 @@ if __name__ == '__main__':
                      "30 31 32 33 34 35 36 37 38 39")
         if menu == '00':
             Bit803.main()
-            #q0.quiz00calculator()
         elif menu == '01':
             q0.quiz01bmi()
         elif menu == '02':

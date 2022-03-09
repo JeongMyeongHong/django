@@ -13,12 +13,12 @@ class Bit803:
 
     @staticmethod
     def ctrl_light():
-        Bit803.light = 0 if Bit803.light == 1 else 1
+        Bit803.light ^= 1
         print(f'전등 스위치를 눌렀습니다. 현재 상태 : {Bit803.light}')
 
     @staticmethod
     def ctrl_temp():
-        Bit803.temp = 0 if Bit803.temp == 1 else 1
+        Bit803.temp ^= 1
         print(f'냉난방기 스위치를 눌렀습니다. 현재 상태 : {Bit803.temp}')
 
     @staticmethod
@@ -26,13 +26,18 @@ class Bit803:
         return f'강의실 현황\t전등 : {Bit803.light}\t 냉난방기 : {Bit803.temp}'
 
     def atttend(self):
-        self.attendance = 0 if self.attendance == 1 else 1
+        self.attendance ^= 1
 
     def print_student(self):
         return f'이름 : {self.name}\t나이 : {self.age}\t전화번호 : {self.phone_num}\t출석 상태 : {self.attendance}'
 
     @staticmethod
     def main():
+        while 1:
+            menu = input('0. Exit 1. 학생 조종하기 2. 학생 상태 출력 3. 강의실 상태 출력')
+            if menu == '0':
+                break
+
         bit_list = [Bit803() for i in range(5)]  # 5명 생성
         bit_list[0].atttend()                    # 첫번째 학생 출석
         bit_list[0].ctrl_light()                 # 첫번째 학생이 스위치 누름
@@ -46,4 +51,7 @@ class Bit803:
         bit_list[3].ctrl_temp()                  # 세번째 학생이 스위치 누름
         print(Bit803.print_803())                # 강의실 정보 확인
 
+
+if __name__ == '__main__':
+    Bit803.main()
 
