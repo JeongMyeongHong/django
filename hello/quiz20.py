@@ -1,9 +1,40 @@
+from pprint import pprint
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
+import pandas as pd
+
+
+def extract_info(soup, tag, info) -> []:
+    return [i.get_text().strip() for i in soup.find_all(tag, {"class": info})]
+
+
+def make_soup(url):
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    return BeautifulSoup(urlopen(req), 'lxml')
+
+
+def dict1(keys, values) -> {}:
+    dict = {}
+    for i in range(len(keys)):
+        dict[keys[i]] = values[i]
+    return dict
+
+
+def dict2(keys, values) -> {}:
+    dict = {}
+    for i, key in enumerate(keys):
+        dict[key] = values[i]
+    return dict
+
+
+def dict3(keys, values) -> {}:
+    dict = {}
+    for key, value in zip(keys, values):
+        dict[key] = value
+    return dict
 
 
 class Quiz20:
-
     def quiz20list(self) -> str:
         list1 = [1, 2, 3, 4]
         print(list1, type(list1))  # [1, 2, 3, 4]list           [1, 2, 3, 4] <class 'list'>
@@ -86,13 +117,15 @@ class Quiz20:
         print(a2)
         return None
 
-    def quiz24zip(self) -> str:
-        url = 'https://music.bugs.co.kr/chart/track/realtime/total'
-        html_doc = urlopen(url)
-        soup = BeautifulSoup(html_doc, 'lxml')  # html.parser vs lxml
-        # print(soup.prettify())
-        a = soup.find_all('p', attrs={"class": "artist"})
-        print(''.join([i.get_text() for i in a]))
+    def quiz24zip(self) -> {}:
+        n = 100
+        soup = make_soup('https://music.bugs.co.kr/chart/track/realtime/total')
+        # infos = [extract_info(soup, 'p', i)[0:n] for i in ['artist', 'title']]
+        # print(infos)
+        #[print(f'{i}등', (j, k)) for i, (j, k) in enumerate(zip(infos[0], infos[1]), start=1)]
+        artists = extract_info(soup, 'p', 'artist')[:n]
+        titles = extract_info(soup, 'p', 'title')[:n]
+        return dict3(titles, artists)
 
     def quiz25dictcom(self) -> str:
         return None
@@ -101,17 +134,17 @@ class Quiz20:
         return None
 
     def quiz27melon(self) -> str:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        url = 'https://www.melon.com/chart/index.htm?dayTime=2022030816'
-        req = Request(url, headers=headers)
-        soup = BeautifulSoup(urlopen(req), 'lxml')
-        #a = soup.find_all('span', {"class": "checkEllipsis"})
-        a = soup.find_all('div', {"class": "ellipsis rank01"})
-        print('\n'.join([i.get_text().strip() for i in a[:10]]))
+        soup = make_soup('https://www.melon.com/chart/index.htm?dayTime=2022030816')
+        a = extract_info(soup, 'div', 'ellipsis rank01')
+        print(a)
         return None
 
-    def quiz28(self) -> str:
-        return None
+    def quiz28dataframe(self) -> None:
+        #dict = self.quiz24zip()
+        df = pd.DataFrame.from_dict(dict, orient='index')
+        print(df)
+        df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
+
 
     def quiz29(self) -> str:
         return None
