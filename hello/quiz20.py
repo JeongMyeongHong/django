@@ -1,7 +1,10 @@
-from pprint import pprint
+import random
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import pandas as pd
+
+from hello import Quiz00
+from hello.domains import my_random, member_choice2
 
 
 def extract_info(soup, tag, info) -> []:
@@ -9,8 +12,7 @@ def extract_info(soup, tag, info) -> []:
 
 
 def make_soup(url):
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    return BeautifulSoup(urlopen(req), 'lxml')
+    return BeautifulSoup(urlopen(Request(url, headers={'User-Agent': 'Mozilla/5.0'})), 'lxml')
 
 
 def dict1(keys, values) -> {}:
@@ -28,10 +30,14 @@ def dict2(keys, values) -> {}:
 
 
 def dict3(keys, values) -> {}:
-    dict = {}
-    for key, value in zip(keys, values):
-        dict[key] = value
-    return dict
+    return {key: value for key, value in zip(keys, values)}
+
+
+def remove_dup_students(students) -> []:
+    students = set(students)
+    while len(students) != 5:
+        students.add(Quiz00().quiz06member_choice())
+    return list(students)
 
 
 class Quiz20:
@@ -122,29 +128,74 @@ class Quiz20:
         soup = make_soup('https://music.bugs.co.kr/chart/track/realtime/total')
         # infos = [extract_info(soup, 'p', i)[0:n] for i in ['artist', 'title']]
         # print(infos)
-        #[print(f'{i}등', (j, k)) for i, (j, k) in enumerate(zip(infos[0], infos[1]), start=1)]
+        # [print(f'{i}등', (j, k)) for i, (j, k) in enumerate(zip(infos[0], infos[1]), start=1)]
         artists = extract_info(soup, 'p', 'artist')[:n]
         titles = extract_info(soup, 'p', 'title')[:n]
-        return dict3(titles, artists)
+        return dict(zip(titles, artists))
 
-    def quiz25dictcom(self) -> str:
-        return None
+    def quiz25dictcom(self) -> {}:
+        # 중복 제거 remove_dup_students()처럼 하면 되지만 아래가 더 편함
+        # students = [(member_choice2(i)) for i in random.sample(range(0, 23), 5)]
+        q = Quiz00()  # 생성자는 리소스를 많이 먹기 때문에 아래에서 5번 해주는것보다 한번 할당 해주고 q를 사용하는 것이 낫다
+        students = remove_dup_students([q.quiz06member_choice() for i in range(5)])
+        scores = [my_random(0, 100) for i in range(35)]
+        print(dict(zip(students, scores)))
+        # q = Quiz00()  # 생성자는 리소스를 많이 먹기 때문에 아래에서 5번 해주는것보다 한번 할당 해주고 q를 사용하는 것이 낫다
+        # students = remove_dup_students([q.quiz06member_choice() for i in range(5)])
+        # scores = [[my_random(0, 100) for i in range(3)] for i in range(5)]
+        # subjects = ['국어', '영어', '수학']
+        # print(scores)
+        # df = pd.DataFrame(data=scores, index=students, columns=[subjects])
+        # print(df)
+        # print(df.iloc[1:2:1])
+        return dict(zip(students, scores))
 
     def quiz26map(self) -> str:
         return None
 
-    def quiz27melon(self) -> str:
+    def quiz27melon(self) -> {}:
         soup = make_soup('https://www.melon.com/chart/index.htm?dayTime=2022030816')
-        a = extract_info(soup, 'div', 'ellipsis rank01')
-        print(a)
-        return None
+        artists = extract_info(soup, 'div', 'ellipsis rank02')
+        titles = extract_info(soup, 'div', 'ellipsis rank01')
+        return dict3(titles, artists)
 
     def quiz28dataframe(self) -> None:
-        #dict = self.quiz24zip()
+        # dict = self.quiz24zip()
+        dict = self.quiz27melon()
         df = pd.DataFrame.from_dict(dict, orient='index')
         print(df)
-        df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
+        df.to_csv('./save/melon.csv', sep=',', na_rep='NaN')
 
+    '''
+    다음 결과 출력
+        a   b   c
+    1   1   3   5
+    2   2   4   6   
+    '''
 
-    def quiz29(self) -> str:
+    def quiz29_pandas_01(self) -> object:
+        d1 = {'a': [1, 2], 'b': [3, 4], 'c': [5, 6]}
+        dict = pd.DataFrame(d1, index=[1, 2])
+        print('dict1')
+        print(dict, '\n')
+
+        l1 = ['a', 'b', 'c']
+        l2 = [[i * 2 + 1 + j for i in range(3)] for j in range(2)]
+        dict2 = pd.DataFrame(data=l2, index=[1, 2], columns=l1)
+        print('dict2')
+        print(dict2, '\n')
+
+        index = [1, 2]
+        l1 = ['a', 'b', 'c']
+        l2 = [[j * 2 + 1 + i for i in range(len(index))] for j in range(len(l1))]
+        d3 = {i: j for i, j in zip(l1, l2)}
+        dict3 = pd.DataFrame(d3, index=index)
+        print('dict3')
+        print(dict3, '\n')
+
+        columns = [chr(i) for i in range(97, 100)]
+        d4 = {j + 1: [i * 2 + 1 if j % 2 == 0 else i * 2 + 2 for i in range(len(columns))] for j in range(2)}
+        dict4 = pd.DataFrame.from_dict(d4, orient='index', columns=columns)
+        print('dict4')
+        print(dict4, '\n')
         return None

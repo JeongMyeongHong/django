@@ -117,14 +117,13 @@ class Quiz00:
         print(f'{name}의 성적표\n국어: {kr} 영어: {en} 수학: {math}\n평균: {avg:.1f}\n결과: {res}')
         return None
 
-    def quiz06memberChoice(self):
+    def quiz06member_choice(self):
         members = ['홍정명', '노홍주', '전종현', '정경준', '양정오',
                    "권혜민", "서성민", "조현국", "김한슬", "김진영",
                    '심민혜', '권솔이', '김지혜', '하진희', '최은아',
                    '최민서', '한성수', '김윤섭', '김승현',
                    "강 민", "최건일", "유재혁", "김아름", "장원종"]
-        print(members[my_random(0, len(members) - 1)])
-        return None
+        return members[my_random(0, len(members) - 1)]
 
     def quiz07lotto(self):
         sel_num = random.sample(range(1, 46), 6)

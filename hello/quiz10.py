@@ -134,7 +134,7 @@ class Quiz10:
 
     def quiz19booking(self) -> str:
         q00 = Quiz00()
-        name = q00.quiz06memberChoice()
+        name = q00.quiz06member_choice()
 
 
         return None
