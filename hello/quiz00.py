@@ -1,4 +1,7 @@
 import random
+
+import pandas as pd
+
 from domains import my100, my_random, member_choice
 
 from hello import Member
@@ -131,72 +134,37 @@ class Quiz00:
         prize_num = random.sample(range(1, 46), 7)
         bonus_num = prize_num[6]
         del prize_num[6]
-        print(len(prize_num))
         prize_num.sort()
-
-        cnt = 0
-        res = ''
-        rank = '꽝'
         print('내가 고른 번호')
         print(sel_num)
         print('당첨 번호')
         print(f'{prize_num} + {bonus_num}')
-
-        for i in prize_num:
-            for j in sel_num:
-                if i == j:
-                    cnt += 1
-                    res += f'{i} '
-                    break
-
-        if cnt == 6:
-            rank = '1등'
-        elif cnt == 5:
+        res = []
+        [[res.append(i) if i == j else 0 for j in sel_num] for i in prize_num]
+        rank = 6 - len(res)
+        if rank == 1:
             if bonus_num in sel_num:
-                rank = '2등'
-                res += f'{bonus_num} '
-            else:
-                rank = '3등'
-        elif cnt == 4:
-            rank = '4등'
-        elif cnt == 3:
-            rank = '5등'
-        elif cnt == 0:
-            res = '없음'
-
-        print(f'맞은 번호는 {res}이며 {rank}입니다.')
+                rank = 7
+                res.append(bonus_num)
+        rank_string = ['1등', '3등', '4등', '5등', '꽝', '꽝', '꽝', '2등']
+        print(f'맞은 번호는 {res}이며 {rank_string[rank]}입니다.')
         return None
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
-        """
-        name = member_choice()
-        account = my_random(0, 1000) * 10  # 최초 잔액 설정
-        deposit_money = my_random(0, 1000) * 10
-        withdraw_money = my_random(0, 1000) * 10
-        while 1:
-            sel = input('0. Exit 1. 입금 2. 출금 3. 잔고 확인')
-            if sel == '1':
-                account = deposit(account, deposit_money)
-            elif sel == '2':
-                if account >= withdraw_money:
-                    account = withdraw(account, withdraw_money)
-                else:
-                    print('잔액이 부족 합니다.')
-            elif sel == '3':
-                chkaccount(name, account)
-            else:
-                break
-        """
         Account.main()
         return None
 
     def quiz09gugudan(self):  # 책받침 구구단
+        [([([print(f'{i + k} * {j} = {(i + k) * j}\t', end='') for k in range(0, 4)], print()) for j in range(1, 10)], print()) for i in (2, 6)]
+
+        # 아래의 남은 for 하나를 처리 못하겠음..
+        # comprehension으로 처리 하자니 원소가 아닌 리스트 채로 들어가서 매트릭스가 된다.
+        res = []
         for i in (2, 6):
-            for j in range(1, 10):
-                for k in range(0, 4):
-                    print(f'{i + k} * {j} = {(i + k) * j}\t', end=' ')
-                print()
-            print()
+            res += ['   '.join(f'{i + k} * {j} = {(i + k) * j}' for k in range(0, 4)) for j in range(1, 10)]
+        print(pd.DataFrame(res))
+
+
         return None
 
 
@@ -281,8 +249,6 @@ class Account:
     @staticmethod
     def main():
         ls = []
-        res = ''
-        res2 = ''
         while 1:
             menu = input('0. 종료 1. 계좌개설 2. 계좌목록 3. 입금 4. 출금 5. 계좌해지 6. 계좌조회')
             if menu == '0':
