@@ -198,4 +198,12 @@ class Quiz20:
         dict4 = pd.DataFrame.from_dict(d4, orient='index', columns=columns)
         print('dict4')
         print(dict4, '\n')
+
+        d1 = {'1': [1, 3, 5]}
+        d2 = {'2': [2, 3, 5]}
+        d3 = dict(d1, **d2)
+        d1.update(d2)
+        df5 = pd.DataFrame.from_dict(d1, orient='index', columns= columns)
+        print('dict5')
+        print(df5, '\n')
         return None

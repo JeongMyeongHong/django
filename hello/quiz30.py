@@ -1,44 +1,138 @@
+import random
 import string
+
+import numpy as np
 import pandas as pd
 from icecream import ic
-from hello.domains import my_random
+from titanic.models import Model
+from hello.domains import my_random, my100, membere_list
 
 
 class Quiz30:
+    @staticmethod
+    def create_df(keys, man_num):
+        return pd.DataFrame([dict(zip(keys, Quiz30.score0to100(len(keys)))) for _ in range(man_num)])
+
+    @staticmethod
+    def create_df_dict(keys, index):
+        return pd.DataFrame.from_dict(dict(zip(keys, Quiz30.score0to100(len(keys), len(index)))),
+                                      orient='index', columns=index)
+
+    @staticmethod
+    def create_df_list(keys, index):
+        return pd.DataFrame([dict(zip(index, Quiz30.score0to100(len(index)))) for _ in range(len(keys))],
+                            index=keys)
+
     def quiz30_df_4_by_3(self) -> object:
-        ls = [[j * 3 + i for i in range(1, 4)] for j in range(4)]
+        # ls = [[j * 3 + i for i in range(1, 4)] for j in range(4)]
+        # 굳이 위처럼 안해줘도 된다.
+        ls = [range(i * 3 + 1, i * 3 + 4) for i in range(4)]
         df = pd.DataFrame(ls, index=range(1, 5), columns=['A', 'B', 'C'])
         ic(df)
         return df
 
     def quiz31_rand_2_by_3(self) -> object:
+        '''
         ls = [[my_random(10, 100) for i in range(3)] for j in range(2)]
         df = pd.DataFrame(ls)
+        '''
+        df = pd.DataFrame(np.random.randint(10, 100, size=(2, 3)))
         ic(df)
         return df
 
+    @staticmethod
+    def score0to100(row_size, column_size=None):
+        return np.random.randint(0, 100, size=row_size) if column_size is None \
+            else np.random.randint(0, 100, size=(row_size, column_size))
+
+    @staticmethod
+    def create_name(name_len=5) -> str:
+        return ''.join([random.choice(string.ascii_uppercase)
+                        if i == 0 else random.choice(string.ascii_lowercase) for i in range(name_len)])
+
     def quiz32_df_grade(self) -> object:
         subjects = ['국어', '영어', '수학', '사회']
-        names = [''.join([string.ascii_letters[my_random(0, 51)] for i in range(5)]) for i in range(10)]
-        ls = {names[j]: [my_random(0, 100) for i in range(4)] for j in range(10)}
-        df = pd.DataFrame.from_dict(ls, orient='index', columns=subjects)
-        print(df)
+        names = [self.create_name() for i in range(10)]
+        d = {names[j]: self.score0to100(4) for j in range(10)}
+        d1 = self.score0to100(10, 4)
+        # df = pd.DataFrame.from_dict(d, orient='index', columns=subjects)
+        # ic(df)
+        # print('*' * 20)
+        #
+        # df1 = pd.DataFrame(d1, index=names, columns=subjects)
+        # ic(df1)
+        # print('*' * 20)
+        #
+        # d2 = dict(zip(names, d1))
+        # df2 = pd.DataFrame.from_dict(d2, orient='index', columns=subjects)
+        # ic(df2)
+        # print('*' * 20)
 
+        d3 = {'index': names,
+              'columns': subjects,
+              'data': d1,
+              'index_names': ['이름'],
+              'column_names': ['과목']}
+        df3 = pd.DataFrame.from_dict(d3, orient='tight')
+        ic(df3)
+        print('*' * 20)
         return None
 
-    def quiz33(self) -> object:
-        column_name = ['나이', '성별', '잔고', '결혼여부']
-        df_list = [[20, '남자', 2000, '미혼'],
-                   [50, '여자', 15000, '결혼'],
-                   [48, '남자', 20000, '결혼'],
-                   [32, '여자', 800, '미혼'],
-                   [28, '남자', 1200, '결혼'],
-                   [38, '여자', 3600, '결혼']]
-        df = pd.DataFrame(df_list, columns=column_name)
-        print(df.tail())
-        return df
+    def quiz33_df_loc(self) -> object:
+        grade_df = Model().new_model('grade.csv', index_col='이름')
+        print(grade_df.loc['홍정명': '서성민'])
+        ic(grade_df)
+        # df = pd.read_csv('data/grade.csv', index_col='이름')
+        # print(df.loc['홍정명'])
+        return None
 
-    def quiz34(self) -> str:
+    def quiz34_df_iloc(self) -> str:
+        '''
+        ic| df.iloc[0]: a    41
+                b    62
+                c    63
+                d    38
+                Name: 0, dtype: int32
+
+ic| df.iloc[[0]]:     a   b   c   d
+                  0  41  62  63  38
+
+ic| df.iloc[[0, 1]]:     a   b   c   d
+                     0  41  62  63  38
+                     1   9  10  74  88
+
+
+ic| df.iloc[:3]:     a   b   c   d
+                 0  41  62  63  38
+                 1   9  10  74  88
+                 2  36  52  48   5
+
+ic| df.iloc[[True, False, True]]:     a   b   c   d
+                                  0  41  62  63  38
+                                  2  36  52  48   5
+
+ic| df.iloc[lambda x: x.index % 2 == 0]:     a   b   c   d
+                                         0  41  62  63  38
+                                         2  36  52  48   5
+
+ic| df.iloc[[0, 2], [1, 3]]:     b   d
+                             0  62  38
+                             2  52   5
+
+ic| df.iloc[1:3, 0:3]:     a   b   c
+                       1   9  10  74
+                       2  36  52  48
+
+ic| df.iloc[:, [True, False, True, False]]:     a   c
+                                            0  41  63
+                                            1   9  74
+                                            2  36  48
+
+ic| df.iloc[:, lambda df: [0, 2]]:     a   c
+                                   0  41  63
+                                   1   9  74
+                                   2  36  48
+        '''
         return None
 
     def quiz35(self) -> str: return None

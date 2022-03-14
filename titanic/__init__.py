@@ -1,5 +1,5 @@
 #https://github.com/datasciencedojo/datasets/blob/master/titanic.csv
-from views import View
+from titanic.views import View
 
 if __name__ == '__main__':
     view = View()

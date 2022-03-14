@@ -5,30 +5,62 @@ from domains import my100, my_random, ten_nums
 
 
 class Quiz10:
+    # 인접한 두 숫자를 비교하여 차례로 정렬하는 방식.
+    # 오름차순이라면 가장 후위에 있는 숫자부터 정렬된다.
     def quiz10bubble(self) -> str:
-        arr = ten_nums()
-        print(arr)
-        for i in range(0, len(arr) - 1):
-            for j in range(0, len(arr) - 1 - i):
-                if arr[j] > arr[j + 1]:
-                    tmp = arr[j]
-                    arr[j] = arr[j + 1]
-                    arr[j + 1] = tmp
-            print(f'{i}회차 배열 : {arr}')
+        # arr = ten_nums()
+        # print(arr)
+        # for i in range(0, len(arr) - 1):
+        #     for j in range(0, len(arr) - 1 - i):
+        #         if arr[j] > arr[j + 1]:
+        #             tmp = arr[j]
+        #             arr[j] = arr[j + 1]
+        #             arr[j + 1] = tmp
+        #     print(f'{i}회차 배열 : {arr}')
+
+        ls = [my100() for i in range(10)]
+        print(f'최초 배열 : {ls}')
+        '''
+        [([Quiz10.swap(ls, j) if ls[j] > ls[j + 1] else None for j in range(0, len(ls) - 1 - i)], print(f'{i}회차 배열 : {ls}')) for i in range(0, len(ls) - 1)]
+        '''
+        [[Quiz10.swap(ls, j) if ls[j] > ls[j + 1] else None for j in range(0, len(ls) - 1 - i)] for i in range(0, len(ls) - 1)]
+        print(f'정렬된 배열 : {ls}')
         return None
 
+    @staticmethod
+    def swap(ls, j):
+        ls[j], ls[j + 1] = ls[j + 1], ls[j]
+
+    '''
+    기정렬된 배열 내로 선택된 요소를 삽입하는 정렬 방식.
+    앞의 요소들 부터 정렬된다.
+    '''
     def quiz11insertion(self) -> str:
-        arr = ten_nums()
-        print(f'0회차 배열 : {arr}')
-        for i in range(1, len(arr)):
+        # arr = ten_nums()
+        # print(f'0회차 배열 : {arr}')
+        # for i in range(1, len(arr)):
+        #     for j in range(0, i):
+        #         if arr[i] < arr[j]:
+        #             arr.insert(j, arr[i])
+        #             del arr[i + 1]
+        #             break
+        #     print(f'{i}회차 배열 : {arr}')
+        # print(f'삽입 정렬 결과 : {arr}')
+        
+        ls = [my100() for i in range(10)]
+        print(f'0회차 배열 : {ls}')
+        for i in range(1, len(ls)):
             for j in range(0, i):
-                if arr[i] < arr[j]:
-                    arr.insert(j, arr[i])
-                    del arr[i + 1]
+                if ls[i] < ls[j]:
+                    Quiz10.insert(ls, i, j)
                     break
-            print(f'{i}회차 배열 : {arr}')
-        print(f'삽입 정렬 결과 : {arr}')
+            print(f'{i}회차 배열 : {ls}')
+        print(f'삽입 정렬 결과 : {ls}')
         return None
+
+    @staticmethod
+    def insert(ls, i, j):
+        pass
 
     def quiz12selection(self) -> str:
         arr = ten_nums()

@@ -84,9 +84,9 @@ if __name__ == '__main__':
         elif menu == '32':
             q3.quiz32_df_grade()
         elif menu == '33':
-            q3.quiz33()
+            q3.quiz33_df_loc()
         elif menu == '34':
-            q3.quiz34()
+            q3.quiz34_df_iloc()
         elif menu == '35':
             q3.quiz35()
         elif menu == '36':
