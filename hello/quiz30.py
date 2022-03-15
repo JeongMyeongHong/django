@@ -4,8 +4,8 @@ import string
 import numpy as np
 import pandas as pd
 from icecream import ic
-from titanic.models import Model
-from hello.domains import my_random, my100, membere_list
+from context.models import Model
+from hello.domains import membere_list
 
 
 class Quiz30:
@@ -14,9 +14,11 @@ class Quiz30:
         return pd.DataFrame([dict(zip(keys, Quiz30.score0to100(len(keys)))) for _ in range(man_num)])
 
     @staticmethod
-    def create_df_dict(keys, index):
-        return pd.DataFrame.from_dict(dict(zip(keys, Quiz30.score0to100(len(keys), len(index)))),
-                                      orient='index', columns=index)
+    def create_df_dict(keys, index, data=None):
+        return \
+            pd.DataFrame.from_dict(dict(zip(keys, Quiz30.score0to100(len(keys), len(index)))), orient='index', columns=index) \
+            if data is None else \
+                pd.DataFrame.from_dict(dict(zip(keys, data)), orient='index', columns=index)
 
     @staticmethod
     def create_df_list(keys, index):
@@ -79,14 +81,23 @@ class Quiz30:
         return None
 
     def quiz33_df_loc(self) -> object:
-        grade_df = Model().new_model('grade.csv', index_col='이름')
-        print(grade_df.loc['홍정명': '서성민'])
-        ic(grade_df)
-        # df = pd.read_csv('data/grade.csv', index_col='이름')
-        # print(df.loc['홍정명'])
+        grade_df = Model().new_model('grade.csv')
+        # ic(grade_df)
+
+        python_scores = grade_df.loc[:, '파이썬']
+        ic(type(python_scores))
+        ic(python_scores)
+
+        cho_scores = grade_df.loc[['조현국', '홍정명', '김진영']]
+        ic(type(cho_scores))
+        ic(cho_scores)
         return None
 
     def quiz34_df_iloc(self) -> str:
+        df = self.create_df_dict(membere_list(), ['자바', '파이썬', 'JS', 'SQL'])
+        ic(df)
+
+        # Model().save_model('grade.csv', df)
         '''
         ic| df.iloc[0]: a    41
                 b    62
@@ -94,44 +105,44 @@ class Quiz30:
                 d    38
                 Name: 0, dtype: int32
 
-ic| df.iloc[[0]]:     a   b   c   d
-                  0  41  62  63  38
-
-ic| df.iloc[[0, 1]]:     a   b   c   d
-                     0  41  62  63  38
-                     1   9  10  74  88
-
-
-ic| df.iloc[:3]:     a   b   c   d
-                 0  41  62  63  38
-                 1   9  10  74  88
-                 2  36  52  48   5
-
-ic| df.iloc[[True, False, True]]:     a   b   c   d
-                                  0  41  62  63  38
-                                  2  36  52  48   5
-
-ic| df.iloc[lambda x: x.index % 2 == 0]:     a   b   c   d
-                                         0  41  62  63  38
-                                         2  36  52  48   5
-
-ic| df.iloc[[0, 2], [1, 3]]:     b   d
-                             0  62  38
-                             2  52   5
-
-ic| df.iloc[1:3, 0:3]:     a   b   c
-                       1   9  10  74
-                       2  36  52  48
-
-ic| df.iloc[:, [True, False, True, False]]:     a   c
-                                            0  41  63
-                                            1   9  74
-                                            2  36  48
-
-ic| df.iloc[:, lambda df: [0, 2]]:     a   c
-                                   0  41  63
-                                   1   9  74
-                                   2  36  48
+        ic| df.iloc[[0]]:     a   b   c   d
+                          0  41  62  63  38
+        
+        ic| df.iloc[[0, 1]]:     a   b   c   d
+                             0  41  62  63  38
+                             1   9  10  74  88
+        
+        
+        ic| df.iloc[:3]:     a   b   c   d
+                         0  41  62  63  38
+                         1   9  10  74  88
+                         2  36  52  48   5
+        
+        ic| df.iloc[[True, False, True]]:     a   b   c   d
+                                          0  41  62  63  38
+                                          2  36  52  48   5
+        
+        ic| df.iloc[lambda x: x.index % 2 == 0]:     a   b   c   d
+                                                 0  41  62  63  38
+                                                 2  36  52  48   5
+        
+        ic| df.iloc[[0, 2], [1, 3]]:     b   d
+                                     0  62  38
+                                     2  52   5
+        
+        ic| df.iloc[1:3, 0:3]:     a   b   c
+                               1   9  10  74
+                               2  36  52  48
+        
+        ic| df.iloc[:, [True, False, True, False]]:     a   c
+                                                    0  41  63
+                                                    1   9  74
+                                                    2  36  48
+        
+        ic| df.iloc[:, lambda df: [0, 2]]:     a   c
+                                           0  41  63
+                                           1   9  74
+                                           2  36  48
         '''
         return None
 

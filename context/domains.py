@@ -1,10 +1,13 @@
-# context, fname, train, test, id, label
+# dname, fname, train, test, id, label
 from dataclasses import dataclass
 
+import pandas
 
-@dataclass
+
+@dataclass()
 class Dataset:
-    context: str
+    dname: str
+    sname: str
     fname: str
     train: str
     test: str
@@ -12,10 +15,16 @@ class Dataset:
     label: str
 
     @property
-    def context(self) -> str: return self._context
+    def dname(self) -> str: return self._dname
 
-    @context.setter
-    def context(self, value): self._context = value
+    @dname.setter
+    def dname(self, value): self._dname = value
+
+    @property
+    def sname(self) -> str: return self._sname
+
+    @sname.setter
+    def sname(self, sname): self._sname = sname
 
     @property
     def fname(self) -> str: return self._fname
@@ -24,13 +33,13 @@ class Dataset:
     def fname(self, value): self._fname = value
 
     @property
-    def train(self) -> str: return self._train
+    def train(self) -> pandas.core.frame.DataFrame: return self._train
 
     @train.setter
     def train(self, value): self._train = value
 
     @property
-    def test(self) -> str: return self._test
+    def test(self) -> pandas.core.frame.DataFrame: return self._test
 
     @test.setter
     def test(self, value): self._test = value
