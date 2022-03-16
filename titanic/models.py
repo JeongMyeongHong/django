@@ -1,3 +1,5 @@
+import pandas
+import pandas as pd
 from icecream import ic
 
 from context.domains import Dataset
@@ -15,57 +17,53 @@ class TitanicModel:
         ic(f'트레인 헤드 {self.dataset.train.head()}')
         ic(self.dataset.train)
 
-    def preprocess(self):
+    def preprocess(self) -> object:
         print('전처리')
-        self.create_train()
-        self.sibSp_garbage()
-        self.parch_garbage()
-        self.ticket_garbage()
-        self.cabin_garbage()
-        self.create_label()
+        df = self.create_train()
+        df = self.drop_feature(df)
+        df = self.create_label(df)
 
-        self.embarked_nominal()
-        self.name_nominal()
-        self.pclass_ordinal()
-        self.fare_ratio()
-        self.sex_ordinal()
-        self.age_ratio()
-
-    def create_label(self) -> object:
-        pass
+        df = self.embarked_nominal(df)
+        df = self.name_nominal(df)
+        df = self.pclass_ordinal(df)
+        df = self.fare_ratio(df)
+        df = self.sex_ordinal(df)
+        df = self.age_ratio(df)
+        return df
 
     def create_train(self) -> object:
-        pass
+        return self.dataset.train
 
-    def drop_feature(self) -> object:
-        pass
+    @staticmethod
+    def create_label(df) -> object:
+        return df
 
-    def pclass_ordinal(self) -> object:
-        pass
+    @staticmethod
+    def drop_feature(df) -> object:
+        for i in ['SibSp', 'Parch', 'Ticket', 'Cabin']:
+            df = df.drop(columns=[i])
+        return df
 
-    def name_nominal(self) -> object:
-        pass
+    @staticmethod
+    def pclass_ordinal(df) -> object:
+        return df
 
-    def sex_ordinal(self) -> object:
-        pass
+    @staticmethod
+    def name_nominal(df) -> object:
+        return df
 
-    def age_ratio(self) -> object:
-        pass
+    @staticmethod
+    def sex_ordinal(df) -> object:
+        return df
 
-    def sibSp_garbage(self) -> object:
-        pass
+    @staticmethod
+    def age_ratio(df) -> object:
+        return df
 
-    def parch_garbage(self) -> object:
-        pass
+    @staticmethod
+    def fare_ratio(df) -> object:
+        return df
 
-    def ticket_garbage(self) -> object:
-        pass
-
-    def fare_ratio(self) -> object:
-        pass
-
-    def cabin_garbage(self) -> object:
-        pass
-
-    def embarked_nominal(self) -> object:
-        pass
+    @staticmethod
+    def embarked_nominal(df) -> object:
+        return df

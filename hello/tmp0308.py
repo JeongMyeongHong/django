@@ -33,12 +33,13 @@ class Bit803:
 
     @staticmethod
     def main():
-        while 1:
-            menu = input('0. Exit 1. 학생 조종하기 2. 학생 상태 출력 3. 강의실 상태 출력')
-            if menu == '0':
-                break
+        # while 1:
+        #     menu = input('0. Exit 1. 학생 조종하기 2. 학생 상태 출력 3. 강의실 상태 출력')
+        #     if menu == '0':
+        #         break
 
         bit_list = [Bit803() for i in range(5)]  # 5명 생성
+
         bit_list[0].atttend()                    # 첫번째 학생 출석
         bit_list[0].ctrl_light()                 # 첫번째 학생이 스위치 누름
         bit_list[0].ctrl_temp()                  # 첫번째 학생이 스위치 누름
