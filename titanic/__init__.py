@@ -6,7 +6,7 @@ from titanic.views import TitanicView
 if __name__ == '__main__':
     # view = TitanicView()
     def print_menu():
-        return '1.템플릿 2.전처리'
+        return '1.템플릿 2.모델'
 
     while 1:
         menu = input(print_menu())
@@ -16,7 +16,8 @@ if __name__ == '__main__':
             titanicTemplates.visualize()
             # view.preprocess('train.csv', 'test.csv')
         elif menu == '2':
-            print(' #### 2. 전처리 #### ')
-            titanicModel = TitanicModel(train_fname='train.csv', test_fname='test.csv')
+            print(' #### 2. 모델 #### ')
+            model = TitanicModel()
+            model.preprocess(train_fname='train.csv', test_fname='test.csv')
         else:
             break
