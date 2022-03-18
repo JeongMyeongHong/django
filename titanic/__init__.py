@@ -19,5 +19,6 @@ if __name__ == '__main__':
             print(' #### 2. 모델 #### ')
             model = TitanicModel()
             model.preprocess(train_fname='train.csv', test_fname='test.csv')
+            # model.kwargs_sample(first='이순신', second='홍길동', third='유관순')
         else:
             break

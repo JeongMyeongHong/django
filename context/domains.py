@@ -9,8 +9,8 @@ class Dataset:
     dname: str
     sname: str
     fname: str
-    train: str
-    test: str
+    train: pandas.core.frame.DataFrame
+    test: pandas.core.frame.DataFrame
     id: str
     label: str
 
