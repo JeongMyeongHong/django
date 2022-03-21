@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import rc, font_manager
 rc('font', family=font_manager.FontProperties(fname='C:/Windows/Fonts/gulim.ttc').get_name())
+
 '''
 데이터 시각화
 엔티티(개체)를 차트로 표현하는 것

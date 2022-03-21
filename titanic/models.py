@@ -4,6 +4,9 @@ import pandas as pd
 
 from context.domains import Dataset
 from context.models import Model
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
 
 
 class TitanicModel(object):
@@ -38,11 +41,15 @@ class TitanicModel(object):
         this = self.age_ratio(this)
         this = self.drop_feature(this, 'Age')
         this = self.fare_ratio(this)
+        this = self.drop_feature(this, 'Fare')
 
+        k_fold = self.create_k_fold()
+        acc = self.get_accuracy(this, k_fold)
+        ic(acc)
 
         # self.print_this(this)
-        ic(this.train.head(20))
-        ic(this.test.head(20))
+        # ic(this.train.head(20))
+        # ic(this.test.head(20))
 
         '''
         this = self.pclass_ordinal(this)
@@ -57,7 +64,7 @@ class TitanicModel(object):
     def print_this(this):
         print('*' * 100)
         ic(f'1. Train 의 타입 : {type(this.train)}\n')
-        ic(f'2. Train 의 컬럼 : {this.train.columns}\n')
+        ic(f'2. Train 의 컬럼 : {type(this.train.columns)}\n')
         print(f'3. Train 의 상위 3개 : {this.train.head(3)}\n')
         ic(f'4. Train 의 null의 개수 : {this.train.isnull().sum()}\n')
         ic(f'5. Test 의 타입 : {type(this.test)}\n')
@@ -160,8 +167,6 @@ class TitanicModel(object):
 
     @staticmethod
     def embarked_nominal(this) -> object:
-        embarked_mapping = {'S': 1, 'C': 2, 'Q': 3}
-        this.train['Embarked'].fillna(1, inplace=True)
         '''test 는 null 없으니까 train 만 처리한다.
         
         null 값은 정규분포를 따라서 정해준다.
@@ -171,6 +176,8 @@ class TitanicModel(object):
         print(these['Embarked'].value_counts())
         S    644, C    168, Q     77
         S    270, C    102, Q     46'''
+        embarked_mapping = {'S': 1, 'C': 2, 'Q': 3}
+        this.train = this.train.fillna({'Embarked': 'S'})
         for these in [this.train, this.test]:
             these['Embarked'] = these['Embarked'].map(embarked_mapping)
         return this
@@ -178,7 +185,31 @@ class TitanicModel(object):
     @staticmethod
     def fare_ratio(this) -> object:
         this.test['Fare'] = this.test['Fare'].fillna(1)
-        this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        for these in [this.train, this.test]:
+            these['FareBand'] = pd.qcut(these['Fare'], 4, labels={1, 2, 3, 4})
         # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
         bins = [-1, 8, 15, 31, np.inf]
         return this
+
+    @staticmethod
+    def create_k_fold() -> object:
+        return KFold(n_splits=10, shuffle=True, random_state=0)
+
+    @staticmethod
+    def get_accuracy(this, k_fold):
+        score = cross_val_score(RandomForestClassifier(), this.train, this.label,
+                                cv=k_fold, n_jobs=1, scoring='accuracy')
+        return round(np.mean(score) * 100, 2)
+
+    def learning(self, train_fname, test_fname):
+        this = self.preprocess(train_fname, test_fname)
+        k_fold = self.create_k_fold()
+        ic(f'사이킷런 알고리즘 정확도: {self.get_accuracy(this, k_fold)}')
+        self.submit(this)
+
+    @staticmethod
+    def submit(this):
+        clf = RandomForestClassifier()
+        clf.fit(this.train, this.label)
+        prediction = clf.predict(this.test)
+        pd.DataFrame({'PassengerId': this.id, 'Survived': prediction}).to_csv('./save/submission.csv', index=False)
