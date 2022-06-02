@@ -63,16 +63,16 @@ class TitanicModel(object):
     @staticmethod
     def print_this(this):
         print('*' * 100)
-        ic(f'1. Train 의 타입 : {type(this.train)}\n')
-        ic(f'2. Train 의 컬럼 : {type(this.train.columns)}\n')
-        print(f'3. Train 의 상위 3개 : {this.train.head(3)}\n')
-        ic(f'4. Train 의 null의 개수 : {this.train.isnull().sum()}\n')
-        ic(f'5. Test 의 타입 : {type(this.test)}\n')
-        ic(f'6. Test 의 컬럼 : {this.test.columns}\n')
-        ic(f'7. Test 의 상위 3개 : {this.test.head(3)}\n')
-        ic(f'8. Test 의 null의 개수 : {this.test.isnull().sum()}\n')
-        ic(f'9. id 의 타입 : {type(this.id)}\n')
-        ic(f'10. id 의 상위 10개 : {this.id[:10]}\n')
+        # ic(f'1. Train 의 타입 : {type(this.train)}\n')
+        # ic(f'2. Train 의 컬럼 : {type(this.train.columns)}\n')
+        # print(f'3. Train 의 상위 3개 : {this.train.head(3)}\n')
+        # ic(f'4. Train 의 null의 개수 : {this.train.isnull().sum()}\n')
+        # ic(f'5. Test 의 타입 : {type(this.test)}\n')
+        # ic(f'6. Test 의 컬럼 : {this.test.columns}\n')
+        # ic(f'7. Test 의 상위 3개 : {this.test.head(3)}\n')
+        # ic(f'8. Test 의 null의 개수 : {this.test.isnull().sum()}\n')
+        # ic(f'9. id 의 타입 : {type(this.id)}\n')
+        # ic(f'10. id 의 상위 10개 : {this.id[:10]}\n')
         print('*' * 100)
 
     @staticmethod
@@ -155,7 +155,7 @@ class TitanicModel(object):
         # labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
         for these in [this.train, this.test]:
             these['AgeGroup'] = pd.cut(these['Age'], bins=bins, right=False, labels=labels)  # pd.cut()을 사용
-        ic(type(this.train['AgeGroup'][0]))
+        # ic(type(this.train['AgeGroup'][0]))
         return this
 
     @staticmethod
@@ -204,7 +204,7 @@ class TitanicModel(object):
     def learning(self, train_fname, test_fname):
         this = self.preprocess(train_fname, test_fname)
         k_fold = self.create_k_fold()
-        ic(f'사이킷런 알고리즘 정확도: {self.get_accuracy(this, k_fold)}')
+        # ic(f'사이킷런 알고리즘 정확도: {self.get_accuracy(this, k_fold)}')
         self.submit(this)
 
     @staticmethod
