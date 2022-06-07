@@ -15,7 +15,7 @@ class ClassNumber:
         [ClassNumber.show_plot(data=self.d, index=i, aspect=1) for i in range(8)]
         plt.suptitle("숫자 0과 1 이미지")
         plt.tight_layout()
-        plt.show()
+        # plt.show()
         plt.savefig('./save/class_number.png')
 
     def vector_image(self):
@@ -24,7 +24,7 @@ class ClassNumber:
         [ClassNumber.show_plot(data=v, index=i, aspect=0.4) for i in range(8)]
         plt.suptitle("벡터화된 이미지", y=1.05)
         plt.tight_layout(w_pad=7)
-        plt.show()
+        # plt.show()
         plt.savefig('./save/vector_image.png')
 
     @staticmethod
