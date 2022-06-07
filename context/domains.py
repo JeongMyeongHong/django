@@ -1,4 +1,5 @@
 # dname, fname, train, test, id, label
+from abc import *
 from dataclasses import dataclass
 
 import pandas
@@ -55,3 +56,56 @@ class Dataset:
 
     @label.setter
     def label(self, value): self._label = value
+
+
+# https://dojang.io/mod/page/view.php?id=2389
+class PrinterBase(metaclass=ABCMeta):  # abc = abstract base class 의 약자
+    @abstractmethod
+    def dframe(self):
+        pass
+
+
+# new_file, csv, xls, json
+class ReaderBase(metaclass=ABCMeta):
+    @abstractmethod
+    def new_file(self):
+        pass
+
+    @abstractmethod
+    def csv(self):
+        pass
+
+    @abstractmethod
+    def xls(self):
+        pass
+
+    @abstractmethod
+    def json(self):
+        pass
+
+
+# Printer extends Base
+class Printer(PrinterBase):
+    def __init__(self):
+        pass
+
+    def dframe(self):
+        pass
+
+
+# Reader extends Base
+class Reader(ReaderBase):
+    def __init__(self):
+        pass
+
+    def new_file(self):
+        pass
+
+    def csv(self):
+        pass
+
+    def xls(self):
+        pass
+
+    def json(self):
+        pass
