@@ -14,7 +14,7 @@ class Solution(object):
         self.W = np.random.rand(1, 1)  # matrix
         self.b = np.random.rand(1)  # scalar
 
-        # 6. learning rate 정의
+        # 6. learning rate 정의 = 최초의 보폭
         self.learning_rate = 0.0001
 
         # 미분을 진행할 loss_func에 대한 lambda 함수를 정의

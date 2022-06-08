@@ -2,16 +2,17 @@
 from abc import *
 from dataclasses import dataclass
 
-import pandas
+import googlemaps
+import pandas as pd
 
 
-@dataclass()
+@dataclass
 class Dataset:
     dname: str
     sname: str
     fname: str
-    train: pandas.core.frame.DataFrame
-    test: pandas.core.frame.DataFrame
+    train: pd.core.frame.DataFrame
+    test: pd.core.frame.DataFrame
     id: str
     label: str
 
@@ -34,13 +35,13 @@ class Dataset:
     def fname(self, value): self._fname = value
 
     @property
-    def train(self) -> pandas.core.frame.DataFrame: return self._train
+    def train(self) -> pd.core.frame.DataFrame: return self._train
 
     @train.setter
     def train(self, value): self._train = value
 
     @property
-    def test(self) -> pandas.core.frame.DataFrame: return self._test
+    def test(self) -> pd.core.frame.DataFrame: return self._test
 
     @test.setter
     def test(self, value): self._test = value
@@ -58,54 +59,87 @@ class Dataset:
     def label(self, value): self._label = value
 
 
+@dataclass
+class File(object):
+    context: str
+    fname: str
+    dframe: object
+
+    @property
+    def context(self) -> str: return self._context
+
+    @context.setter
+    def context(self, context): self._context = context
+
+    @property
+    def fname(self) -> str: return self._fname
+
+    @fname.setter
+    def fname(self, fname): self._fname = fname
+
+    @property
+    def dframe(self) -> str: return self._dframe
+
+    @dframe.setter
+    def dframe(self, dframe): self._dframe = dframe
+
+
 # https://dojang.io/mod/page/view.php?id=2389
 class PrinterBase(metaclass=ABCMeta):  # abc = abstract base class 의 약자
     @abstractmethod
-    def dframe(self):
+    def dframe(self, this):
         pass
 
 
 # new_file, csv, xls, json
 class ReaderBase(metaclass=ABCMeta):
+
+    @staticmethod
     @abstractmethod
     def new_file(self):
         pass
 
     @abstractmethod
-    def csv(self):
+    def csv(self, fname):
         pass
 
     @abstractmethod
-    def xls(self):
+    def xls(self, fname, header, cols):
         pass
 
     @abstractmethod
-    def json(self):
+    def json(self, fname):
         pass
 
 
 # Printer extends Base
 class Printer(PrinterBase):
-    def __init__(self):
-        pass
-
-    def dframe(self):
-        pass
+    def dframe(self, this):
+        print('*' * 100)
+        print(f'1. Target type \n {type(this)} ')
+        print(f'2. Target column \n {this.columns} ')
+        print(f'3. Target top 1개 행\n {this.head(1)} ')
+        print(f'4. Target bottom 1개 행\n {this.tail(1)} ')
+        print(f'4. Target null 의 갯수\n {this.isnull().sum()}개')
+        print('*' * 100)
 
 
 # Reader extends Base
 class Reader(ReaderBase):
-    def __init__(self):
-        pass
 
-    def new_file(self):
-        pass
+    @staticmethod
+    def new_file(file) -> str:
+        return file.context + file.fname
 
-    def csv(self):
-        pass
+    def csv(self, file) -> object:
+        return pd.read_csv(f'{self.new_file(file)}.csv', encoding='UTF-8', thousands=',')
 
-    def xls(self):
-        pass
+    # header, column 두개 옵션 걸어 주기.
+    def xls(self, file, header, cols) -> object:
+        return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols)
 
-    def json(self):
-        pass
+    def json(self, file) -> object:
+        return pd.read_json(f'{self.new_file(file)}.json')
+
+    def gmaps(self) -> object:
+        return googlemaps.Client(key='')
