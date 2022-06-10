@@ -85,14 +85,8 @@ class File(object):
 
 
 # https://dojang.io/mod/page/view.php?id=2389
-class PrinterBase(metaclass=ABCMeta):  # abc = abstract base class 의 약자
-    @abstractmethod
-    def dframe(self, this):
-        pass
-
-
 # new_file, csv, xls, json
-class ReaderBase(metaclass=ABCMeta):
+class ReaderBase(metaclass=ABCMeta):  # abc = abstract base class 의 약자
 
     @staticmethod
     @abstractmethod
@@ -104,24 +98,12 @@ class ReaderBase(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def xls(self, fname, header, cols):
+    def xls(self, fname, header, cols, skiprow):
         pass
 
     @abstractmethod
     def json(self, fname):
         pass
-
-
-# Printer extends Base
-class Printer(PrinterBase):
-    def dframe(self, this):
-        print('*' * 100)
-        print(f'1. Target type \n {type(this)} ')
-        print(f'2. Target column \n {this.columns} ')
-        print(f'3. Target top 1개 행\n {this.head(1)} ')
-        print(f'4. Target bottom 1개 행\n {this.tail(1)} ')
-        print(f'4. Target null 의 갯수\n {this.isnull().sum()}개')
-        print('*' * 100)
 
 
 # Reader extends Base
@@ -131,15 +113,27 @@ class Reader(ReaderBase):
     def new_file(file) -> str:
         return file.context + file.fname
 
-    def csv(self, file) -> object:
+    def csv(self, file):
         return pd.read_csv(f'{self.new_file(file)}.csv', encoding='UTF-8', thousands=',')
 
     # header, column 두개 옵션 걸어 주기.
-    def xls(self, file, header, cols) -> object:
-        return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols)
+    def xls(self, file, header, cols, skiprow):
+        return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols, skiprows=[skiprow])
 
-    def json(self, file) -> object:
+    def json(self, file):
         return pd.read_json(f'{self.new_file(file)}.json')
 
-    def gmaps(self) -> object:
+    @staticmethod
+    def gmaps() -> googlemaps.client.Client:
         return googlemaps.Client(key='')
+        # 키는 무조건 지우고 커밋하자.
+
+    @staticmethod
+    def dframe(this):
+        print('*' * 100)
+        print(f'1. Target type \n {type(this)} ')
+        print(f'2. Target column \n {this.columns} ')
+        print(f'3. Target top 1개 행\n {this.head(1)} ')
+        print(f'4. Target bottom 1개 행\n {this.tail(1)} ')
+        print(f'4. Target null 의 갯수\n {this.isnull().sum()}개')
+        print('*' * 100)

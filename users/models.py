@@ -12,6 +12,6 @@ class User(models.Model):
     class Meta:
         db_table = 'users'  # 자바의 @Table(name="users")
 
-    def __str__(self):
+    def __str__(self):  # 자바의 toString
         return f'{self.pk} {self.username}'
 
