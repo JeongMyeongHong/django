@@ -113,14 +113,14 @@ class Reader(ReaderBase):
     def new_file(file) -> str:
         return file.context + file.fname
 
-    def csv(self, file):
+    def csv(self, file: File) -> 'PandasDataFrame':
         return pd.read_csv(f'{self.new_file(file)}.csv', encoding='UTF-8', thousands=',')
 
     # header, column 두개 옵션 걸어 주기.
-    def xls(self, file, header, cols, skiprow):
-        return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols, skiprows=[skiprow])
+    def xls(self, file: File, header: str, cols: str, skip_row=None):
+        return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols, skiprows=[skip_row])
 
-    def json(self, file):
+    def json(self, file: File):
         return pd.read_json(f'{self.new_file(file)}.json')
 
     @staticmethod
