@@ -1,4 +1,5 @@
 # dname, fname, train, test, id, label
+import json
 from abc import *
 from dataclasses import dataclass
 
@@ -121,7 +122,10 @@ class Reader(ReaderBase):
         return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols, skiprows=[skip_row])
 
     def json(self, file: File):
-        return pd.read_json(f'{self.new_file(file)}.json')
+        return pd.read_json(f'{self.new_file(file)}.json', encoding='UTF-8')
+
+    def map_json(self, file: File) -> object:
+        return json.load(open(f'{self.new_file(file)}.json', encoding='UTF-8'))
 
     @staticmethod
     def gmaps() -> googlemaps.client.Client:
