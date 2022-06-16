@@ -44,7 +44,9 @@ class Ddareungee(Reader):
         file = self.file
         file.fname = 'train'
         df = self.csv(file)
-        ic(df)
+        ic(df.info())
+        df.dropna(inplace=True)
+        ic(df.info())
 
 
 if __name__ == '__main__':
