@@ -50,6 +50,7 @@ from context.domains import File, Reader
 4. Document Embedding
 '''
 
+
 class Solution(Reader):
     def __init__(self):
         self.okt = Okt()
@@ -59,11 +60,10 @@ class Solution(Reader):
         def print_menu():
             print('0. Exit')
             print('1.Preprocessing : bit803.txt 를 읽는다.')
-            print('2.Tokenization')
-            print('21.remove_stopword')
-            print('3.Token_embedding')
-            print('4.Document_embedding')
-            print('5.2018년 삼성사업계획서를 분석해서 워드클라우드를 작성하시오.')
+            print('2.read_stopword')
+            print('3.tokenization')
+            print('4.token_embedding')
+            print('6.카톡방 클라우드')
             return input('메뉴 선택 \n')
 
         while 1:
@@ -71,18 +71,16 @@ class Solution(Reader):
             if menu == '0':
                 break
             elif menu == '1':
-                print(self.preprocessing())
+                self.preprocessing()
             elif menu == '2':
-                # self.tokenization()
                 self.read_stopword()
-            elif menu == '21':
-                # self.tokenization()
-                pass
             elif menu == '3':
-                self.token_embedding()
+                self.tokenization()
             elif menu == '4':
-                pass
+                self.token_embedding()
             elif menu == '5':
+                pass
+            elif menu == '6':
                 self.draw_wordcloud()
             elif menu == '99':
                 Solution.download()
@@ -103,31 +101,36 @@ class Solution(Reader):
     def tokenization(self):
         noun_tokens = []
         tokens = word_tokenize(self.preprocessing())
-        # ic(tokens[:100])
         for i in tokens:
             pos = self.okt.pos(i)
-            _ = [j[0] for j in pos if j[1] == 'Noun']
-            if len(''.join(_)) > 1:
-                noun_tokens.append(' '.join(_))
-        texts = ' '.join(noun_tokens)
-        # ic(texts[:100])
-        return texts
+            _ = []
+            [_.append(j[0]) for j in pos if j[1] == 'Noun']
+            _ = ''.join(_)
+            if len(_) > 1:
+                noun_tokens.append(_)
+        return noun_tokens
 
     def read_stopword(self):
-        self.okt.pos("삼성전자 글로벌센터 전자사업부", stem=True)
+        # self.okt.pos("삼성전자 글로벌센터 전자사업부", stem=True)
         file = self.file
         file.fname = 'bit_stopwords.txt'
         path = self.new_file(file)
         with open(path, 'r', encoding='utf-8') as f:
             texts = f.read()
-        return texts
+        texts = texts.replace('\n', ' ')
+        tokenizer = re.compile(r'[^ㄱ-힣]+')
+        return tokenizer.sub(' ', texts)
 
     def token_embedding(self) -> []:
         tokens = self.tokenization()
+        [print(i) for i in tokens[:100]]
+        # print('이건 토큰즈\n\n\n')
         stopwords = word_tokenize(self.read_stopword())
-
+        [print(i) for i in stopwords]
+        # print('이건 스탑워즈\n\n\n')
         texts = [text for text in tokens if text not in stopwords]
-        ic(self.count_words(texts))
+        ic(texts[:100])
+        # ic(self.count_words(texts))
         return texts
 
     def draw_wordcloud(self):
@@ -139,6 +142,7 @@ class Solution(Reader):
         plt.figure(figsize=(12, 12))
         plt.imshow(wcloud, interpolation='bilinear')
         plt.axis('off')
+        plt.savefig('./save/bitCloud.png')
         plt.show()
 
     def count_words(self, training_set):
