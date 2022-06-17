@@ -1,6 +1,7 @@
+from collections import defaultdict
+
 from konlpy.tag import Okt
 from nltk.tokenize import word_tokenize
-import nltk
 import re
 import pandas as pd
 from nltk import FreqDist
@@ -8,14 +9,14 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from icecream import ic
 
-
 from context.domains import File, Reader
+
 '''
 문장 형태의 문자 데이터를 전처리할 때 많이 사용되는 방법이다. 
 말뭉치(코퍼스 corpus)를 어떤 토큰의 단위로 분할하냐에 따라 
 단어 집합의 크기, 단어 집합이 표현하는 토크의 형태가 다르게 나타나며 
 이는 모델의 성능을 좌지우지하기도 한다.
- 
+
 이때 텍스트를 토큰의 단위로 분할하는 작업을 토큰화라고 한다. 
 토큰의 단위는 보통 의미를 가지는 최소 의미 단위로 선정되며, 
 토큰의 단위를 단어로 잡으면 Word Tokenization이라고 하고, 
@@ -49,7 +50,6 @@ from context.domains import File, Reader
 4. Document Embedding
 '''
 
-
 class Solution(Reader):
     def __init__(self):
         self.okt = Okt()
@@ -58,7 +58,7 @@ class Solution(Reader):
     def hook(self):
         def print_menu():
             print('0. Exit')
-            print('1.Preprocessing : kr-Report_2018.txt 를 읽는다.')
+            print('1.Preprocessing : bit803.txt 를 읽는다.')
             print('2.Tokenization')
             print('21.remove_stopword')
             print('3.Token_embedding')
@@ -73,8 +73,8 @@ class Solution(Reader):
             elif menu == '1':
                 print(self.preprocessing())
             elif menu == '2':
-                self.tokenization()
-                # self.read_stopword()
+                # self.tokenization()
+                self.read_stopword()
             elif menu == '21':
                 # self.tokenization()
                 pass
@@ -90,9 +90,9 @@ class Solution(Reader):
                 break
 
     def preprocessing(self):
-        # self.okt.pos("삼성전자 글로벌센터 전자사업부", stem=True)
+        self.okt.pos("삼성전자 글로벌센터 전자사업부", stem=True)
         file = self.file
-        file.fname = 'kr-Report_2018.txt'
+        file.fname = 'bit803.txt'
         path = self.new_file(file)
         with open(path, 'r', encoding='utf-8') as f:
             texts = f.read()
@@ -105,7 +105,7 @@ class Solution(Reader):
         tokens = word_tokenize(self.preprocessing())
         # ic(tokens[:100])
         for i in tokens:
-            pos = self.okt.pos(i, stem=True)
+            pos = self.okt.pos(i)
             _ = [j[0] for j in pos if j[1] == 'Noun']
             if len(''.join(_)) > 1:
                 noun_tokens.append(' '.join(_))
@@ -114,9 +114,9 @@ class Solution(Reader):
         return texts
 
     def read_stopword(self):
-        # self.okt.pos("삼성전자 글로벌센터 전자사업부", stem=True)
+        self.okt.pos("삼성전자 글로벌센터 전자사업부", stem=True)
         file = self.file
-        file.fname = 'stopwords.txt'
+        file.fname = 'bit_stopwords.txt'
         path = self.new_file(file)
         with open(path, 'r', encoding='utf-8') as f:
             texts = f.read()
@@ -125,19 +125,28 @@ class Solution(Reader):
     def token_embedding(self) -> []:
         tokens = self.tokenization()
         stopwords = word_tokenize(self.read_stopword())
-        ic(stopwords)
 
         texts = [text for text in tokens if text not in stopwords]
+        ic(self.count_words(texts))
         return texts
 
     def draw_wordcloud(self):
         _ = self.token_embedding()
+        freqtxt = pd.Series(dict(FreqDist(_))).sort_values(ascending=False)
+        # ic(freqtxt)
         wcloud = WordCloud('./data/D2Coding.ttf', relative_scaling=0.2,
                            background_color='white').generate(" ".join(_))
         plt.figure(figsize=(12, 12))
         plt.imshow(wcloud, interpolation='bilinear')
         plt.axis('off')
         plt.show()
+
+    def count_words(self, training_set):
+        counts = defaultdict(lambda: [0])
+        for text in training_set:
+            for word in text:
+                counts[word][0] += 1
+        return counts
 
     @staticmethod
     def download():
