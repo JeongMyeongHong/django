@@ -65,8 +65,8 @@ class LinearCombination:
 
 if __name__ == '__main__':
     # LinearCombination.combine()
-    file_name1 = './data/전신.png'
-    file_name2 = './data/아이언맨.png'
+    file_name1 = 'data/전신.png'
+    file_name2 = 'data/아이언맨.png'
     LinearCombination.combine_exam(LinearCombination.load_image(file_name1), LinearCombination.load_image(file_name2))
     LinearCombination.combine_exam(
-        LinearCombination.load_image('./data/1.png'), LinearCombination.load_image('./data/2.png'))
+        LinearCombination.load_image('data/1.png'), LinearCombination.load_image('data/2.png'))
