@@ -1,12 +1,11 @@
 # 필요한 모듈 임포트
 import tensorflow as tf
-import matplotlib.pyplot as plt
+from tensorflow import keras
 from keras import datasets, layers, models
-from tensorflow.keras.datasets import mnist
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Flatten, Dense
-from tensorflow.keras.models import load_model
-
+from keras.datasets import mnist
+from keras.models import Sequential, load_model
+from keras.layers import Flatten, Dense
+import matplotlib.pyplot as plt
 
 class Solution(tf.keras.Model):
     def __init__(self):
@@ -18,8 +17,8 @@ class Solution(tf.keras.Model):
 
     def preprocessing(self):
         # MNIST 데이터셋 가져오기
-        (x_train, y_train), (x_test, self.y_test) = mnist.load_data()
-        x_train, self.x_test = x_train / 255.0, x_test / 255.0  # 데이터 정규화
+        (x_train, y_train), (self.x_test, self.y_test) = mnist.load_data()
+        x_train, self.x_test = x_train / 255.0, self.x_test / 255.0  # 데이터 정규화
 
         # tf.data를 사용하여 데이터셋을 섞고 배치 만들기
         ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(10000)
@@ -48,6 +47,20 @@ class Solution(tf.keras.Model):
 
         # 모델 정보 출력
         model.summary()
+        model.save('./save/mnist_model.h5')
+
+        # fig, loss_ax = plt.subplots()
+        # acc_ax = loss_ax.twinx()
+        # loss_ax.plot(hist.history['loss'], 'y', label='train loss')
+        # loss_ax.plot(hist.history['val_loss'], 'r', label='val loss')
+        # acc_ax.plot(hist.history['accuracy'], 'b', label='train acc')
+        # acc_ax.plot(hist.history['val_accuracy'], 'g', label='val acc')
+        # loss_ax.set_xlabel('epoch')
+        # loss_ax.set_ylabel('loss')
+        # acc_ax.set_ylabel('accuracy')
+        # loss_ax.legend(loc='upper left')
+        # acc_ax.legend(loc='lower left')
+        # plt.show()
 
 
 if __name__ == '__main__':
